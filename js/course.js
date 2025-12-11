@@ -1,7 +1,8 @@
 
 const API = {
     course: "https://cors-anywhere.herokuapp.com/http://109.73.207.225:8080/api/course/",
-    sendMessage: "https://cors-anywhere.herokuapp.com/http://109.73.207.225:8080/api/message/"
+    sendMessage: "https://cors-anywhere.herokuapp.com/http://109.73.207.225:8080/api/message/",
+    index: "https://rdnmarkov.github.io/cources-webapp"
 };
 
 const params = new URLSearchParams(window.location.search);
@@ -60,7 +61,7 @@ function sendMessage(messageId, button) {
     fetch(API.sendMessage + messageId + "?chatId=" + chatId, { method: "POST" },)
         .then(res => {
             if (res.ok) {
-                window.location.href = `https://t.me/WhiskeyCodeHelpContentBot`;
+                window.location.href = `https://t.me/Java_storage_bot`;
             } else {
                 alert("Ошибка при отправке сообщения");
                 button.disabled = false;
@@ -70,4 +71,8 @@ function sendMessage(messageId, button) {
             alert("Ошибка соединения с сервером");
             button.disabled = false;
         });
+}
+
+function goBackToIndex() {
+    window.location.href = "?chatId=" + chatId;
 }
