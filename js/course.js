@@ -74,5 +74,5 @@ function sendMessage(messageId, button) {
 }
 
 function goBackToIndex() {
-    window.location.href = "?chatId=" + chatId;
+    window.location.href = index + "?chatId=" + chatId;
 }
