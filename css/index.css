@@ -1,0 +1,112 @@
+ body {
+            background: linear-gradient(135deg, #1a0029, #090014, #1a0033);
+            font-family: 'VT323', monospace;
+            color: #e3d7ff;
+        }
+
+        /* Sidebar retro */
+        .sidebar {
+            width: 260px;
+            background: rgba(30, 0, 60, 0.8);
+            border-right: 3px solid #ff00ff;
+            padding: 20px;
+            height: 100vh;
+            position: fixed;
+            top: 0;
+            overflow-y: auto;
+            box-shadow: 0 0 15px #ff00ff;
+        }
+
+        @media (max-width: 768px) {
+            .sidebar {
+                position: relative;
+                width: 100%;
+                height: auto;
+                border-right: none;
+                border-bottom: 3px solid #ff00ff;
+            }
+        }
+
+        .content {
+            margin-left: 280px;
+            padding: 20px;
+        }
+
+        @media (max-width: 768px) {
+            .content {
+                margin-left: 0;
+            }
+        }
+
+        /* Categories */
+        .category-label {
+            font-weight: bold;
+            color: #9d8cff;
+            text-shadow: 0 0 5px #a54bff;
+        }
+
+        .category-item input {
+            accent-color: #ff00e1;
+        }
+
+        /* Cards */
+        .course-card {
+            background: rgba(20, 0, 40, 0.85);
+            border: 3px solid #8a2eff;
+            border-radius: 10px;
+            padding: 20px;
+            color: #e7dbff;
+            font-size: 18px;
+            box-shadow: 0 0 10px #a64bff;
+            transition: 0.3s;
+        }
+
+        .course-card:hover {
+            transform: translateY(-5px) scale(1.02);
+            box-shadow: 0 0 25px #ff00ff;
+        }
+
+        .btn-primary {
+            background: #ff00d4;
+            border: 2px solid #ff4df7;
+            color: black;
+            font-weight: bold;
+            text-shadow: 0 0 5px white;
+            transition: 0.2s;
+        }
+
+        .btn-primary:hover {
+            background: #ff4df7;
+            color: black;
+            box-shadow: 0 0 10px #ff76f7;
+        }
+
+        /* Pagination */
+        .pagination .page-link {
+            background: rgba(50, 0, 80, 0.8);
+            border: 2px solid #8a2eff;
+            color: #e7dbff;
+        }
+
+        .page-item.active .page-link {
+            background: #ff00e1;
+            border-color: #ff76ff;
+            color: black;
+            box-shadow: 0 0 8px #ff76ff;
+        }
+
+        #searchInput::placeholder {
+            color: #ffe26f;
+            text-shadow: 0 0 5px #ffbf00;
+        }
+
+        /* Glow on focus */
+        #searchInput:focus {
+            outline: none;
+            border-color: #ff4df7;
+            background: rgba(80, 0, 120, 1);
+
+            box-shadow: 0 0 18px #ff4df7,
+                        0 0 28px #b400ff,
+                        inset 0 0 10px #ff00ff;
+        }

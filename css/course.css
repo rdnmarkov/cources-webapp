@@ -1,0 +1,85 @@
+ body {
+            background: linear-gradient(135deg, #1a0029, #090014, #1a0033);
+            font-family: 'VT323', monospace;
+            color: #e3d7ff;
+        }
+
+        /* Заголовок */
+        #courseTitle {
+            color: #ff76ff;
+            font-family: 'Press Start 2P';
+            font-size: 26px;
+            text-shadow: 0 0 10px #ff4df7;
+        }
+
+        #courseDescription {
+            color: #e7dbff;
+            font-size: 20px;
+            opacity: 0.9;
+        }
+
+        /* Карточки уроков */
+        .lesson-card {
+            background: rgba(20, 0, 40, 0.85);
+            border: 3px solid #8a2eff;
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 25px;
+
+            box-shadow: 0 0 15px #a64bff;
+            transition: 0.25s;
+        }
+        .lesson-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 0 25px #ff00ff;
+        }
+
+        /* Название урока */
+        .lesson-title {
+            color: #b28dff;
+            font-size: 22px;
+            text-shadow: 0 0 7px #ff4df7;
+        }
+
+        .lesson-description {
+            font-size: 18px;
+            color: #e7dbff;
+        }
+
+        /* Кнопка сообщений */
+        .message-button {
+            margin-right: 7px;
+            margin-bottom: 7px;
+
+            background: rgba(50, 0, 80, 0.8);
+            border: 2px solid #ff4df7;
+            color: #ffb7ff;
+
+            font-size: 18px;
+
+            box-shadow: 0 0 12px rgba(255, 77, 247, 0.5);
+            transition: 0.25s;
+        }
+        .message-button:hover {
+            background: #ff4df7;
+            color: black;
+            box-shadow: 0 0 20px #ff76f7;
+        }
+
+        /* Кнопка назад */
+        .back-button {
+            margin-top: 30px;
+            font-size: 20px;
+
+            background: rgba(30, 0, 60, 0.7);
+            border: 2px solid #8a2eff;
+            color: #e7dbff;
+
+            box-shadow: 0 0 10px #a64bff;
+            transition: 0.25s;
+        }
+        .back-button:hover {
+            background: #ff4df7;
+            color: black;
+            box-shadow: 0 0 18px #ff76f7;
+        }
