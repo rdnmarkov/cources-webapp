@@ -1,7 +1,7 @@
 
 const API = {
-    course: "http://109.73.207.225:8080/api/course/",
-    sendMessage: "http://109.73.207.225:8080/api/message/"
+    course: "https://cors-anywhere.herokuapp.com/http://109.73.207.225:8080/api/course/",
+    sendMessage: "https://cors-anywhere.herokuapp.com/http://109.73.207.225:8080/api/message/"
 };
 
 const params = new URLSearchParams(window.location.search);
