@@ -1,7 +1,7 @@
 
 const API = {
-    course: "https://cors-anywhere.herokuapp.com/http://109.73.207.225:8080/api/course/",
-    sendMessage: "https://cors-anywhere.herokuapp.com/http://109.73.207.225:8080/api/message/",
+    course: "https://109.73.207.225:8443/api/course/",
+    sendMessage: "https://109.73.207.225:8443/api/message/",
     index: "https://rdnmarkov.github.io/cources-webapp"
 };
 
@@ -61,7 +61,7 @@ function sendMessage(messageId, button) {
     fetch(API.sendMessage + messageId + "?chatId=" + chatId, { method: "POST" },)
         .then(res => {
             if (res.ok) {
-                window.location.href = `https://t.me/Java_storage_bot`;
+                alert("Сообщение отправлено в Java_storage_bot");
             } else {
                 alert("Ошибка при отправке сообщения");
                 button.disabled = false;
@@ -74,6 +74,5 @@ function sendMessage(messageId, button) {
 }
 
 function goBackToIndex() {
-    console.log(API.index + "?chatId=" + chatId);
     window.location.href = API.index + "?chatId=" + chatId;
 }
