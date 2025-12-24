@@ -3,9 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <title>Courses</title>
+
+    <!-- Mobile first -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+
+    <!-- Bootstrap -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
 
-    <!-- Retro font -->
+    <!-- Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=VT323&display=swap" rel="stylesheet">
 
     <link href="css/index.css" rel="stylesheet">
@@ -14,93 +19,105 @@
 
 <body>
 
+<!-- MOBILE HEADER -->
+<div class="mobile-header">
+    <button class="burger-btn" onclick="toggleSidebar()">☰</button>
+    <span class="header-title">КУРСЫ</span>
+</div>
+
 <!-- SIDEBAR -->
-<div class="sidebar">
-    <h5 class="mb-3" style="color:#ff4df7; font-family:'Press Start 2P'; font-size:14px;">КАТЕГОРИИ</h5>
+<div class="sidebar" id="sidebar">
+    <h5>КАТЕГОРИИ</h5>
     <div id="categoryList"></div>
 </div>
 
-<!-- MAIN CONTENT -->
-<div class="content">
-    <h2 class="mb-4" style="font-family: 'Press Start 2P'; color:#ff76ff;">КУРСЫ. Виски с кодом</h2>
+<div class="sidebar-overlay" id="sidebarOverlay" onclick="toggleSidebar()"></div>
 
-    <div class="mb-4 d-flex">
-        <input id="searchInput"
-               type="text"
-               class="form-control form-control-lg"
-               style="background:rgba(30,0,60,0.6); border:2px solid #8a2eff; color:#e7dbff;"
-               placeholder="🔎 Поиск по курсам и урокам...">
-        <button id="searchButton" class="btn btn-primary ms-2" style="min-width:120px;">🔍 Поиск</button>
+<!-- APP WRAPPER -->
+<div class="app-wrapper">
+    <div class="content">
+
+        <h2 class="page-title">КУРСЫ. Виски с кодом</h2>
+
+        <div class="search-box">
+            <input id="searchInput" type="text" placeholder="🔎 Поиск по курсам и урокам...">
+            <button id="searchButton">Поиск</button>
+        </div>
+
+        <div id="coursesContainer" class="row g-3"></div>
+
+        <ul id="pagination" class="pagination mt-3 justify-content-center"></ul>
+
     </div>
-
-    <div id="coursesContainer" class="row g-4"></div>
-
-    <nav>
-        <ul id="pagination" class="pagination mt-4"></ul>
-    </nav>
 </div>
 
-
 <script>
+    /* Telegram */
     const tg = window.Telegram.WebApp;
     tg.expand();
 
-    const urlParams = new URLSearchParams(window.location.search);
-    const chatId = urlParams.get("chatId");
+    /* Params */
+    const chatId = new URLSearchParams(window.location.search).get("chatId");
 
+    /* API */
     const API = {
-        categories: "https://109.73.207.225:8443/api/categories",
-        courses: "https://109.73.207.225:8443/api/courses",
-        search: "https://109.73.207.225:8443/api/search"
+        categories: "/api/categories",
+        courses: "/api/courses",
+        search: "/api/search"
     };
 
     let currentPage = 0;
     let totalPages = 0;
 
+    /* INIT */
     loadCategories();
     loadCourses();
 
+    /* BURGER */
+    function toggleSidebar() {
+        sidebar.classList.toggle("open");
+        sidebarOverlay.classList.toggle("show");
+    }
+
+    /* CATEGORIES */
     function loadCategories() {
         fetch(API.categories)
-            .then(res => res.json())
+            .then(r => r.json())
             .then(data => {
-                let html = "";
-                data.forEach(cat => {
-                    html += `
-                        <div class="category-item">
-                            <input type="checkbox" class="category-filter" value="${cat.id}">
-                            <span class="category-label">${cat.title}</span>
-                        </div>
-                    `;
-                });
-                document.getElementById("categoryList").innerHTML = html;
+                categoryList.innerHTML = data.map(cat => `
+                    <label class="category-item">
+                        <input type="checkbox" value="${cat.id}" class="category-filter">
+                        <span>${cat.title}</span>
+                    </label>
+                `).join("");
 
                 document.querySelectorAll(".category-filter").forEach(ch => {
-                    ch.addEventListener("change", () => loadCourses(0));
+                    ch.addEventListener("change", () => {
+                        toggleSidebar();
+                        loadCourses(0);
+                    });
                 });
             });
     }
 
-
+    /* COURSES */
     function loadCourses(page = 0) {
         currentPage = page;
 
-        const selected = [...document.querySelectorAll(".category-filter:checked")]
-            .map(ch => "categoryIds=" + ch.value)
+        const cats = [...document.querySelectorAll(".category-filter:checked")]
+            .map(c => "categoryIds=" + c.value)
             .join("&");
 
-        let url = API.courses + "?page=" + page;
-        if (selected.length > 0) url += "&" + selected;
+        let url = `${API.courses}?page=${page}`;
+        if (cats) url += "&" + cats;
 
-        const searchQuery = document.getElementById("searchInput").value.trim();
-        if (searchQuery.length > 0) {
-            url = API.search + "?query=" + encodeURIComponent(searchQuery) + "&page=" + page;
-        }
+        const q = searchInput.value.trim();
+        if (q) url = `${API.search}?query=${encodeURIComponent(q)}&page=${page}`;
 
         fetch(url)
-            .then(res => res.json())
+            .then(r => r.json())
             .then(data => {
-                const courses = Array.isArray(data) ? data : (data.content || []);
+                const courses = Array.isArray(data) ? data : data.content || [];
                 renderCourses(courses);
                 totalPages = data.totalPages || 1;
                 renderPagination();
@@ -108,62 +125,39 @@
     }
 
     function renderCourses(courses) {
-        let html = "";
-        courses.forEach(course => {
-            html += `
-                <div class="col-md-6 col-lg-4">
-                    <div class="course-card">
-                        <h5 style="color:#b28dff; font-size:22px;">${course.title}</h5>
-                        <p>${course.description}</p>
-                        <button class="btn btn-primary w-100 mt-2" onclick="openCourse(${course.id})">
-                            Открыть курс
-                        </button>
-                    </div>
+        coursesContainer.innerHTML = courses.map(c => `
+            <div class="col-12">
+                <div class="course-card">
+                    <h5>${c.title}</h5>
+                    <p>${c.description || ""}</p>
+                    <button onclick="openCourse(${c.id})">Открыть курс</button>
                 </div>
-            `;
-        });
-        document.getElementById("coursesContainer").innerHTML = html;
+            </div>
+        `).join("");
     }
 
     function openCourse(id) {
-        window.location.href = "https://rdnmarkov.github.io/cources-webapp/course.html?id=" + id + "&chatId=" + chatId;
+        location.href = `/course.html?id=${id}&chatId=${chatId}`;
     }
 
-    document.getElementById("searchButton").addEventListener("click", () => {
-    loadCourses(0);
-});
+    /* SEARCH */
+    searchButton.onclick = () => loadCourses(0);
 
+    /* PAGINATION */
     function renderPagination() {
-        const ul = document.getElementById("pagination");
-        ul.innerHTML = "";
-
+        pagination.innerHTML = "";
         if (totalPages <= 1) return;
 
-        const createBtn = (page, text, disabled = false, active = false) => {
+        for (let i = 0; i < totalPages; i++) {
             const li = document.createElement("li");
-            li.className = "page-item " + (disabled ? "disabled" : "") + (active ? " active" : "");
-            li.innerHTML = `<a class="page-link" href="#">${text}</a>`;
-            if (!disabled) {
-                li.addEventListener("click", e => {
-                    e.preventDefault();
-                    loadCourses(page);
-                });
-            }
-            return li;
-        };
-
-        ul.appendChild(createBtn(0, "«", currentPage === 0));
-        ul.appendChild(createBtn(currentPage - 1, "‹", currentPage === 0));
-
-        let start = Math.max(0, currentPage - 2);
-        let end = Math.min(totalPages - 1, currentPage + 2);
-
-        for (let i = start; i <= end; i++) {
-            ul.appendChild(createBtn(i, i + 1, false, currentPage === i));
+            li.className = "page-item " + (i === currentPage ? "active" : "");
+            li.innerHTML = `<a class="page-link" href="#">${i + 1}</a>`;
+            li.onclick = e => {
+                e.preventDefault();
+                loadCourses(i);
+            };
+            pagination.appendChild(li);
         }
-
-        ul.appendChild(createBtn(currentPage + 1, "›", currentPage === totalPages - 1));
-        ul.appendChild(createBtn(totalPages - 1, "»", currentPage === totalPages - 1));
     }
 </script>
 
