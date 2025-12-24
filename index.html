@@ -60,32 +60,10 @@
     loadCategories();
     loadCourses();
 
-<!--    function loadCategories() {-->
-<!--        fetch(API.categories)-->
-<!--            .then(res => res.json())-->
-<!--            .then(data => {-->
-<!--                let html = "";-->
-<!--                data.forEach(cat => {-->
-<!--                    html += `-->
-<!--                        <div class="category-item">-->
-<!--                            <input type="checkbox" class="category-filter" value="${cat.id}">-->
-<!--                            <span class="category-label">${cat.title}</span>-->
-<!--                        </div>-->
-<!--                    `;-->
-<!--                });-->
-<!--                document.getElementById("categoryList").innerHTML = html;-->
-
-<!--                document.querySelectorAll(".category-filter").forEach(ch => {-->
-<!--                    ch.addEventListener("change", () => loadCourses(0));-->
-<!--                });-->
-<!--            });-->
-<!--    }-->
-
-function loadCategories() {
+    function loadCategories() {
         fetch(API.categories)
             .then(res => res.json())
             .then(data => {
-                if (data.ok) {
                 let html = "";
                 data.forEach(cat => {
                     html += `
@@ -100,11 +78,7 @@ function loadCategories() {
                 document.querySelectorAll(".category-filter").forEach(ch => {
                     ch.addEventListener("change", () => loadCourses(0));
                 });
-                } else {
-                     alert("Ошибка при отправке сообщения", data);
-                }
-
-            }).catch(e => alert("ERR", e));
+            });
     }
 
 
